@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+:root {
+  /* LOTR Theme - Dark Mode by Default */
+  --background: #1a1a1a;
+  --foreground: #ededed;
+
+  /* Primary Colors */
+  --forest-green: #2d5016;
+  --primary-green: #4d8a2b;
+  --primary-green-hover: #5da033;
+
+  /* Accent Colors */
+  --elvish-gold: #d4a017;
+  --elvish-gold-hover: #e0b020;
+  --parchment: #d4c494;
+  --parchment-dark: #b8a878;
+
+  /* Dark Theme Colors */
+  --mordor-dark: #1a1a1a;
+  --mordor-darker: #121212;
+  --mordor-card: #242424;
+  --mordor-border: #333333;
+
+  /* Status Colors */
+  --success: #4d8a2b;
+  --error: #dc2626;
+  --warning: #d4a017;
+
+  /* Text Colors */
+  --text-primary: #ededed;
+  --text-secondary: #a1a1a1;
+  --text-muted: #6b6b6b;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Primary */
+  --color-primary: var(--primary-green);
+  --color-primary-hover: var(--primary-green-hover);
+  --color-forest: var(--forest-green);
+
+  /* Accent */
+  --color-gold: var(--elvish-gold);
+  --color-gold-hover: var(--elvish-gold-hover);
+  --color-parchment: var(--parchment);
+  --color-parchment-dark: var(--parchment-dark);
+
+  /* Dark */
+  --color-card: var(--mordor-card);
+  --color-border: var(--mordor-border);
+  --color-dark: var(--mordor-dark);
+  --color-darker: var(--mordor-darker);
+
+  /* Status */
+  --color-success: var(--success);
+  --color-error: var(--error);
+  --color-warning: var(--warning);
+
+  /* Text */
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+
+  /* Fonts */
+  --font-heading: var(--font-cinzel);
+  --font-body: var(--font-lora);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), Georgia, serif;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading), 'Times New Roman', serif;
+}
+
+/* Scrollbar styling for dark theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--mordor-darker);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--mordor-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Focus styles for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--elvish-gold);
+  outline-offset: 2px;
+}
+
+/* Selection styling */
+::selection {
+  background: var(--primary-green);
+  color: var(--text-primary);
+}
+
+/* Safe area for bottom navigation */
+.safe-area-pb {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* Mobile-first responsive utilities */
+html {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Prevent overscroll bounce on iOS */
+html, body {
+  overscroll-behavior: none;
+}
+
+/* Better touch targets for mobile */
+button, a, input, select, textarea {
+  touch-action: manipulation;
+}
+
+/* Hide scrollbar on mobile but keep functionality */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+}
+
+/* Smooth scrolling */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* iOS input zoom prevention */
+@media screen and (max-width: 768px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Bottom nav safe area */
+.pb-safe {
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 80px);
+}
