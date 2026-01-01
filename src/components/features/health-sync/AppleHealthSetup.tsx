@@ -10,15 +10,12 @@ import {
 } from "@/lib/api";
 import type { AppleHealthSyncStatus } from "@/types";
 import { formatDate } from "@/lib/utils";
-
-// The iCloud shortcut URL - update this once the shortcut is uploaded to iCloud
-// To create the shortcut, follow the guide at: docs/apple-health-shortcut-setup.md
-const SHORTCUT_URL = "";
+import { ShortcutWizard } from "./ShortcutWizard";
 
 // Backend webhook URL for the shortcut
 const WEBHOOK_URL = "https://quest-to-mordor-backend-production.up.railway.app/api/webhooks/apple-health";
 
-type SetupState = "loading" | "not-setup" | "key-generated" | "enabled" | "error";
+type SetupState = "loading" | "not-setup" | "key-generated" | "wizard" | "enabled" | "error";
 
 export function AppleHealthSetup() {
   const { addToast } = useUIStore();
@@ -28,6 +25,7 @@ export function AppleHealthSetup() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isRevoking, setIsRevoking] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
 
   // Fetch current status on mount
   useEffect(() => {
@@ -167,49 +165,47 @@ export function AppleHealthSetup() {
           </div>
 
           <div className="space-y-3 pt-2">
-            <h4 className="text-sm font-semibold text-text-primary">Next Steps:</h4>
-            <ol className="space-y-2 text-sm text-text-secondary">
-              <li className="flex gap-2">
-                <span className="font-bold text-primary">1.</span>
-                <span>Copy the API key above</span>
-              </li>
-              {SHORTCUT_URL ? (
-                <li className="flex gap-2">
-                  <span className="font-bold text-primary">2.</span>
-                  <a
-                    href={SHORTCUT_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gold hover:underline"
-                  >
-                    Download the Apple Shortcut
-                  </a>
-                </li>
-              ) : (
-                <li className="flex flex-col gap-1">
-                  <div className="flex gap-2">
-                    <span className="font-bold text-primary">2.</span>
-                    <span>Create an Apple Shortcut that POSTs to:</span>
-                  </div>
-                  <code className="ml-5 text-xs bg-dark rounded px-2 py-1 break-all">
-                    {WEBHOOK_URL}
-                  </code>
-                </li>
-              )}
-              <li className="flex gap-2">
-                <span className="font-bold text-primary">3.</span>
-                <span>Add header: <code className="text-xs bg-dark rounded px-1">X-Apple-Health-API-Key</code> with your key</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="font-bold text-primary">4.</span>
-                <span>Set up daily automation in Shortcuts app</span>
-              </li>
-            </ol>
+            <p className="text-sm text-text-secondary">
+              Now you need to create an Apple Shortcut to sync your steps.
+              Follow our step-by-step guide:
+            </p>
           </div>
 
-          <Button variant="primary" className="w-full" onClick={handleDone}>
-            I&apos;ve Copied My Key
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="primary"
+              className="flex-1"
+              onClick={() => setState("wizard")}
+            >
+              Start Setup Guide
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={handleDone}
+            >
+              Later
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (state === "wizard" && newApiKey) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <AppleHealthIcon />
+            Shortcut Setup Guide
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ShortcutWizard
+            apiKey={newApiKey}
+            webhookUrl={WEBHOOK_URL}
+            onComplete={handleDone}
+          />
         </CardContent>
       </Card>
     );
@@ -244,25 +240,38 @@ export function AppleHealthSetup() {
             </div>
           </div>
 
-          <div className="space-y-2 pt-2">
-            {SHORTCUT_URL ? (
-              <a
-                href={SHORTCUT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-card border border-border px-4 py-3 text-sm font-medium text-text-primary hover:bg-border transition-colors"
+          {!status.lastSyncAt && (
+            <div className="rounded-lg bg-gold/10 border border-gold/30 p-3">
+              <p className="text-sm text-text-secondary">
+                No syncs yet. Need help setting up the shortcut?
+              </p>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="mt-2 text-gold"
+                onClick={() => setShowGuide(true)}
               >
-                <ShortcutIcon />
-                Open Shortcut
-              </a>
-            ) : (
-              <div className="rounded-lg bg-card border border-border px-4 py-3">
-                <p className="text-xs text-text-muted mb-1">Webhook URL:</p>
-                <code className="text-xs text-text-secondary break-all">
-                  {WEBHOOK_URL}
-                </code>
-              </div>
-            )}
+                View Setup Guide
+              </Button>
+            </div>
+          )}
+
+          <div className="space-y-2 pt-2">
+            <div className="rounded-lg bg-card border border-border px-4 py-3">
+              <p className="text-xs text-text-muted mb-1">Webhook URL:</p>
+              <code className="text-xs text-text-secondary break-all">
+                {WEBHOOK_URL}
+              </code>
+            </div>
+
+            <Button
+              variant="secondary"
+              className="w-full"
+              onClick={() => setShowGuide(true)}
+            >
+              <BookIcon className="h-4 w-4 mr-2" />
+              View Setup Guide
+            </Button>
 
             <Button
               variant="ghost"
@@ -273,6 +282,35 @@ export function AppleHealthSetup() {
               Revoke API Key
             </Button>
           </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (showGuide) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <AppleHealthIcon />
+              Shortcut Setup Guide
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowGuide(false)}
+            >
+              Close
+            </Button>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ShortcutWizard
+            apiKey="(Your existing API key)"
+            webhookUrl={WEBHOOK_URL}
+            onComplete={() => setShowGuide(false)}
+          />
         </CardContent>
       </Card>
     );
@@ -341,6 +379,15 @@ function CheckIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <polyline points="20,6 9,17 4,12" />
+    </svg>
+  );
+}
+
+function BookIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
     </svg>
   );
 }
