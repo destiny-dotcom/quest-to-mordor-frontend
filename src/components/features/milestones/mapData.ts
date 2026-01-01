@@ -17,7 +17,7 @@ export const milestoneCoordinates: MapCoordinate[] = [
   { id: 'old-forest', x: 140, y: 280, terrain: 'forest', labelPosition: 'left' },
   { id: 'bree', x: 220, y: 380, terrain: 'plains', labelPosition: 'right' },
   { id: 'weathertop', x: 160, y: 500, terrain: 'plains', labelPosition: 'left' },
-  { id: 'rivendell', x: 140, y: 620, terrain: 'elvish', labelPosition: 'right' },
+  { id: 'rivendell', x: 260, y: 620, terrain: 'elvish', labelPosition: 'left' },
   { id: 'misty-mountains', x: 187, y: 760, terrain: 'mountains', labelPosition: 'right' },
   { id: 'moria-west', x: 140, y: 880, terrain: 'mines', labelPosition: 'left' },
   { id: 'moria-east', x: 220, y: 980, terrain: 'mines', labelPosition: 'right' },
