@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useAuthStore, useProgressStore } from "@/stores";
 import { Card, CardContent, CardHeader, CardTitle, Button } from "@/components/ui";
+import { AppleHealthSetup } from "@/components/features/health-sync";
 import { formatNumber, formatMiles, formatDate } from "@/lib/utils";
 
 export default function ProfilePage() {
@@ -68,6 +69,9 @@ export default function ProfilePage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Apple Health Sync */}
+        <AppleHealthSetup />
 
         {/* Quick Links */}
         <Card>
