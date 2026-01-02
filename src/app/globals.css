@@ -1,36 +1,36 @@
 @import "tailwindcss";
 
 :root {
-  /* LOTR Theme - Dark Mode by Default */
-  --background: #1a1a1a;
-  --foreground: #ededed;
+  /* LOTR Theme - Earthy Parchment Colors */
+  --background: #c9b888;
+  --foreground: #3a2a1a;
 
   /* Primary Colors */
   --forest-green: #2d5016;
-  --primary-green: #4d8a2b;
-  --primary-green-hover: #5da033;
+  --primary-green: #3d6a20;
+  --primary-green-hover: #4d7a2b;
 
   /* Accent Colors */
-  --elvish-gold: #d4a017;
-  --elvish-gold-hover: #e0b020;
-  --parchment: #d4c494;
+  --elvish-gold: #a07830;
+  --elvish-gold-hover: #b08840;
+  --parchment: #e8dcc4;
   --parchment-dark: #b8a878;
 
-  /* Dark Theme Colors */
-  --mordor-dark: #1a1a1a;
-  --mordor-darker: #121212;
-  --mordor-card: #242424;
-  --mordor-border: #333333;
+  /* Earthy Theme Colors */
+  --mordor-dark: #b8a878;
+  --mordor-darker: #a09060;
+  --mordor-card: #e8dcc4;
+  --mordor-border: #a08858;
 
   /* Status Colors */
-  --success: #4d8a2b;
-  --error: #dc2626;
-  --warning: #d4a017;
+  --success: #3d6a20;
+  --error: #a03020;
+  --warning: #a07830;
 
   /* Text Colors */
-  --text-primary: #ededed;
-  --text-secondary: #a1a1a1;
-  --text-muted: #6b6b6b;
+  --text-primary: #3a2a1a;
+  --text-secondary: #5a4a3a;
+  --text-muted: #7a6a5a;
 }
 
 @theme inline {
@@ -81,14 +81,14 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading), 'Times New Roman', serif;
 }
 
-/* Scrollbar styling for dark theme */
+/* Scrollbar styling for earthy theme */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--mordor-darker);
+  background: var(--parchment-dark);
 }
 
 ::-webkit-scrollbar-thumb {
